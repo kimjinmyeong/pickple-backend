@@ -1,6 +1,7 @@
-🥦 PICKPLE
+🌱 PICKPLE
 =============
-![pickple_logo 복사본](https://github.com/user-attachments/assets/34bb530d-d258-4836-ab36-5830ce1525f8)
+<img width="1114" alt="image" src="https://github.com/user-attachments/assets/a1304f96-5a02-4f43-9719-f648aad988ad">
+
 
 ## 📢 프로젝트 간단 소개
 
