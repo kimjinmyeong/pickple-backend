@@ -9,8 +9,6 @@
 
 고객 경험을 최우선 가치로, 많은 고객들에게 그들이 원하는 경험을 제공하여 선택(pick) 받자는 소망을 담았습니다.
 
-**대규모 트래픽**을 견딜 수 있는 이커머스 서비스를 구축하여, 사용자에게 빠르고 안정적인 쇼핑 경험을 제공합니다.
-
 ## 🎯 프로젝트 목표
 
 - **MSA** 구조를 통해 서비스의 확장성과 유연성을 확보
@@ -31,11 +29,6 @@
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white"><img src="https://img.shields.io/badge/intellijidea-000000?style=for-the-badge&logo=intellijidea&logoColor=white"><img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"><img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
 ## 🪄 주요 기능
-
-* **대규모 트래픽 처리**
-
-    - [x] 대규모 트래픽 상황에서도 안정적이고 빠른 응답 구축을 위해 **Kafka** 이벤트 기반의 **비동기 처리** 방식으로 구현
-    - [x] 효율적인 분산 처리로 시스템의 부하를 줄이고, 대규모 트래픽을 효과적으로 관리 가능
 
 * **주문**
 
@@ -121,10 +114,9 @@
     - [x] Layered Architecture: 시스템을 여러 레이어로 나누어 서로 다른 관심사를 처리하도록 설계
     - [x] Event-Driven Architecture: Kafka를 사용하여 이벤트가 전달되며, 각 서비스가 이벤트를 생성하고, 소비하는 방식으로 통신
 
-* **멀티 모듈 구조**
-    - [x] MSA 환경에서 공통으로 사용되는 보일러 코드, 빈, 설정들을 공통 모듈(common-module)에 따로 두어 관리함으로써 유지보수성을 높이고 코드의 중복성을 낮춤
-
 * **CI/CD**
+  - [x] CI: 서비스 컨테이너를 구성하여 테스트 실행
+  - [x] CD: 도커화한 image를 AWS ECR에 Push, 각 EC2에 배포
 
 <br>
 
