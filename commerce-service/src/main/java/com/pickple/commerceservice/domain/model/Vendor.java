@@ -31,15 +31,13 @@ public class Vendor extends BaseEntity {
     @Column(name = "username", nullable = false)
     private String username;
 
-    public Vendor updateVendor(String vendorName, String vendorAddress, String username) {
+    public void updateVendor(String vendorName, String vendorAddress, String username) {
         this.vendorName = vendorName;
         this.vendorAddress = vendorAddress;
         this.username = username;
-        return this;
     }
 
-    public Vendor softDelete() {
+    public void softDelete() {
         this.isDelete = true;
-        return this;
     }
 }

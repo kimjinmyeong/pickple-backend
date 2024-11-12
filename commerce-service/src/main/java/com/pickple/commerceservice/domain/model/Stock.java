@@ -30,6 +30,7 @@ public class Stock extends BaseEntity {
     private Product product;
 
     @Version
+    @Builder.Default
     @Column(name = "version")
     private Long version = 0L;
 

@@ -14,7 +14,6 @@ import com.pickple.commerceservice.infrastructure.feign.DeliveryClient;
 import com.pickple.commerceservice.infrastructure.feign.PaymentClient;
 import com.pickple.commerceservice.infrastructure.feign.dto.DeliveryClientDto;
 import com.pickple.commerceservice.infrastructure.feign.dto.PaymentClientDto;
-import com.pickple.commerceservice.infrastructure.messaging.OrderMessagingProducerService;
 import com.pickple.commerceservice.infrastructure.redis.TemporaryStorageService;
 import com.pickple.commerceservice.presentation.dto.request.OrderCreateRequestDto;
 import com.pickple.commerceservice.presentation.dto.request.PreOrderRequestDto;
@@ -26,7 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
@@ -88,11 +87,9 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        // 트랜잭션이 완료된 후 결제 요청을 전송
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-
                 // 결제 요청 (Kafka)
                 messagingProducerService.sendPaymentRequest(order.getOrderId(), order.getAmount(), username);
 
@@ -105,7 +102,6 @@ public class OrderService {
                         "주문이 성공적으로 완료되었습니다. 주문 번호: " + order.getOrderId(),
                         "ORDER"
                 );
-
             }
         });
 
