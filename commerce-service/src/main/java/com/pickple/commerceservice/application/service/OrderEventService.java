@@ -1,6 +1,5 @@
-package com.pickple.commerceservice.infrastructure.messaging;
+package com.pickple.commerceservice.application.service;
 
-import com.pickple.commerceservice.application.service.StockService;
 import com.pickple.commerceservice.domain.model.Order;
 import com.pickple.commerceservice.domain.model.OrderDetail;
 import com.pickple.commerceservice.domain.model.OrderStatus;
