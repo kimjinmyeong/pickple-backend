@@ -22,7 +22,19 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      
+
+      - name: ELK Repository에서 ELK 환경 setup
+        uses: actions/checkout@v4
+        with:
+          repository: pickple-ecommerce/docker-elk
+          path: temp-config-secrets
+
+      - name: Run docker-compose up -d
+        working-directory: temp-config-secrets
+        run: |
+          docker compose up setup
+          docker-compose up -d --build
+
       - name: Docker Compose로 서비스 실행
         run: |
           docker compose -f docker/docker-compose.dev.yml up -d
