@@ -33,7 +33,7 @@ jobs:
         working-directory: temp-config-secrets
         run: |
           docker compose up setup
-          docker-compose up -d --build
+          docker compose up -d --build
 
       - name: Docker Compose로 서비스 실행
         run: |
