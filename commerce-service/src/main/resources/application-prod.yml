@@ -32,6 +32,10 @@ spring:
           - ${REDIS_HOST}:${REDIS_SENTINEL_PORT2}
           - ${REDIS_HOST}:${REDIS_SENTINEL_PORT3}
       timeout: 10000
+    elasticsearch:
+      host: ${ELASTIC_SEARCH_HOST}:${ELASTIC_SEARCH_PORT}
+      username: ${ELASTIC_SEARCH_USERNAME}
+      password: ${ELASTIC_SEARCH_PASSWORD}
 
 eureka:
   client:
@@ -69,6 +73,9 @@ kafka:
     payment-cancel-request: payment-cancel-request
     delivery-delete-request: delivery-delete-request
     notification-create-request: notification-create-request
+    product-created: product-created
+    product-updated: product-updated
+    product-deleted: product-deleted
 
 resilience4j:
   circuitbreaker:
