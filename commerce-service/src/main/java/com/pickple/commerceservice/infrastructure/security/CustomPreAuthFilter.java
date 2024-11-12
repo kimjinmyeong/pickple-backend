@@ -25,7 +25,8 @@ public class CustomPreAuthFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // GET 요청의 /api/v1/products 경로에 대해 필터 적용 제외
-        return requestURI.equals("/api/v1/products") && "GET".equalsIgnoreCase(request.getMethod());
+        return (requestURI.equals("/api/v1/products") && "GET".equalsIgnoreCase(request.getMethod())) ||
+                (requestURI.startsWith("/api/v1/products/search") && "GET".equalsIgnoreCase(request.getMethod()));
     }
 
     @Override

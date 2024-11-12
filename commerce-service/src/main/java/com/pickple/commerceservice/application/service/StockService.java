@@ -22,27 +22,15 @@ import java.util.UUID;
 public class StockService {
 
     private final StockRepository stockRepository;
-    private final ProductRepository productRepository;
 
     // 재고 생성
     @Transactional
-    public StockResponseDto createStock(StockCreateRequestDto createDto) {
-        // 상품을 찾기 전에 productId가 null인지 체크
-        UUID productId = createDto.getProductId();
-        if (productId == null) {
-            throw new CustomException(CommerceErrorCode.PRODUCT_ID_NOT_FOUND);
-        }
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new CustomException(CommerceErrorCode.PRODUCT_NOT_FOUND));
-
+    public Stock createStock(Product product, Long quantity) {
         Stock stock = Stock.builder()
-                .stockQuantity(createDto.getStockQuantity())
+                .stockQuantity(quantity)
                 .product(product)
                 .build();
-
-        Stock savedStock = stockRepository.save(stock);
-        return StockResponseDto.fromEntity(savedStock);
+        return stockRepository.save(stock);
     }
 
     // 상품 별 재고 조회

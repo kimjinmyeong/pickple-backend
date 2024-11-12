@@ -1,5 +1,6 @@
 package com.pickple.commerceservice.infrastructure.messaging;
 
+import com.pickple.commerceservice.application.service.OrderEventService;
 import com.pickple.commerceservice.exception.CommerceErrorCode;
 import com.pickple.commerceservice.infrastructure.configuration.EventSerializer;
 import com.pickple.commerceservice.infrastructure.messaging.events.DeliveryCreateResponseEvent;

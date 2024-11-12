@@ -1,4 +1,4 @@
-package com.pickple.commerceservice.infrastructure.messaging;
+package com.pickple.commerceservice.application.service;
 
 import com.pickple.commerceservice.infrastructure.messaging.events.*;
 import com.pickple.commerceservice.infrastructure.redis.TemporaryStorageService;

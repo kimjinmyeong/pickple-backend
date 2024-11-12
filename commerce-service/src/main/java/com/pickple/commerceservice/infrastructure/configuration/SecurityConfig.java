@@ -38,7 +38,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers("/api/v1/products").permitAll()
-                        .anyRequest().authenticated()  // 나머지 요청은 인증 필요
+                        .requestMatchers("/api/v1/products/search").permitAll()
+                        .anyRequest().permitAll()  // 나머지 요청은 인증 필요
         );
 
         http.addFilterBefore(customPreAuthFilter, UsernamePasswordAuthenticationFilter.class);

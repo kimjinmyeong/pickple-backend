@@ -36,16 +36,16 @@ public class Product extends BaseEntity {
 
     @Builder.Default
     @Column(name = "is_public", nullable = false)
-    private Boolean isPublic = true; // 기본값 설정
+    private Boolean isPublic = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Stock stock;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true) // PreOrderDetails와 1:1 매핑 추가
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // PreOrderDetails와 1:1 매핑 추가
     private PreOrderDetails preOrderDetails;
 
     // 재고 설정 메서드
