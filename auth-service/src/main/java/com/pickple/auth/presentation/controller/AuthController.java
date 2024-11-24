@@ -23,8 +23,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-in")
-    public ApiResponse<UserDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        UserDto userDto = authService.login(loginRequestDto, response);
+    public ApiResponse<UserResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        UserResponseDto userDto = authService.login(loginRequestDto, response);
         return ApiResponse.success(HttpStatus.OK, "login success", userDto);
     }
 

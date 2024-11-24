@@ -1,7 +1,6 @@
 package com.pickple.auth.application.service;
 
 import com.pickple.auth.application.domain.model.User;
-import com.pickple.auth.application.dto.UserDto;
 import com.pickple.auth.application.security.JwtUtil;
 import com.pickple.auth.application.security.UserDetailsImpl;
 import com.pickple.auth.exception.CustomAuthException;
@@ -38,7 +37,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserServiceClient userServiceClient;
 
-    public UserDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         log.info("로그인 시도, username: {}", loginRequestDto.getUsername());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
@@ -52,7 +51,7 @@ public class AuthService {
         String jwt = jwtUtil.createToken(username, roles);
         jwtUtil.addJwtToHeader(jwt, response);
         log.info("로그인 성공, username: {}", username);
-        return UserDto.convertToUserDto(user);
+        return UserResponseDto.fromUser(user);
     }
 
     // 회원 가입

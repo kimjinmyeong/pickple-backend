@@ -1,8 +1,5 @@
 package com.pickple.auth.infrastructure.config;
 
-import com.pickple.auth.application.security.JwtUtil;
-import com.pickple.auth.application.security.UserDetailsServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,15 +14,15 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-public class WebSecurityConfig {
+public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationConfiguration authenticationConfiguration;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    // AuthenticationManager Bean 생성
-    @Bean
+	public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+		this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+	}
+
+	@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -41,10 +38,16 @@ public class WebSecurityConfig {
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
+        http.authorizeHttpRequests(authorize ->
+                authorize.requestMatchers("/api/v1/auth/**").permitAll().anyRequest().authenticated()
+        );
+
+         http.exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+        );
         return http.build();
     }
 
-    // 비밀번호 암호화 방식 설정
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

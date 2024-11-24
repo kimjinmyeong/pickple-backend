@@ -1,18 +1,25 @@
 package com.pickple.auth.presentation.response;
 
-
-import lombok.AllArgsConstructor;
+import com.pickple.auth.application.domain.model.User;
+import lombok.Builder;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class UserResponseDto {
 
 	private String username;
-	private String nickname;
-	private String email;
-	private String role;
+	private List<String> roles;
 
+	public static UserResponseDto fromUser(User user) {
+		return UserResponseDto.builder()
+				.username(user.getUsername())
+				.roles(new ArrayList<>(user.getRoles()))
+				.build();
+	}
 }
 
