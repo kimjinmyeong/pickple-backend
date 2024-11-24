@@ -1,8 +1,5 @@
 package com.pickple.gateway.infrastructure.config;
 
-import com.pickple.gateway.application.dto.UserDto;
-import com.pickple.gateway.application.service.RedisService;
-import com.pickple.gateway.infrastructure.feign.UserServiceClient;
 import com.pickple.gateway.infrastructure.security.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +11,12 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -28,13 +24,9 @@ import java.util.Optional;
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final RedisService redisService;
-    private final UserServiceClient userServiceClient;
 
-    public SecurityConfig(JwtUtil jwtUtil, UserServiceClient userServiceClient, RedisService redisService) {
+    public SecurityConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-        this.userServiceClient = userServiceClient;
-        this.redisService = redisService;
     }
 
     @Bean
@@ -53,8 +45,6 @@ public class SecurityConfig {
 
     public WebFilter jwtAuthenticationFilter(JwtUtil jwtUtil) {
         return (exchange, chain) -> {
-
-            log.info("check filter run");
 
             // /auth/login/prometheus 경로는 필터를 적용하지 않음
             String path = exchange.getRequest().getURI().getPath();
@@ -78,13 +68,10 @@ public class SecurityConfig {
 
                 String username = claims.getSubject();
 
-                UserDto userDto = Optional.ofNullable(redisService.getValueAsClass("user:" + username, UserDto.class))
-                        .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
-
                 // 사용자 정보를 새로운 헤더에 추가
                 ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-                        .header("X-User-Name", userDto.getUsername())  // 사용자명 헤더 추가
-                        .header("X-User-Roles", String.join(",", userDto.getRoles()))    // 권한 정보 헤더 추가
+                        .header("X-User-Name", username) // 사용자명 헤더 추가
+                        .header("X-User-Roles", String.join(",", claims.get("roles", List.class))) // roles 리스트를 문자열로 변환
                         .build();
 
                 // 수정된 요청으로 필터 체인 계속 처리

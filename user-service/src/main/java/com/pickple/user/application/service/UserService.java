@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,28 +77,39 @@ public class UserService {
     }
 
     // 유저 존재 여부 확인 메서드
-    private User findUserByUsername(String username) {
+    @Transactional(readOnly = true)
+    public User findUserByUsername(String username) {
         return userRepository.findByUsernameAndIsDeleteFalse(username)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public UserDto getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         return UserDto.convertToUserDto(user);
     }
 
-    public Boolean registerUser(SignUpRequestDto signUpDto) {
+    @Transactional
+    public UserResponseDto registerUser(SignUpRequestDto signUpDto) {
         User user = User.convertSignUpDtoToUser(signUpDto);
-        try {
-            userRepository.save(user);
-            return true;
-        } catch (Exception e) {
-            log.error("회원 가입에서 User 저장 시 오류 발생");
-            return false;
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {
+            log.error("중복된 username: {}", signUpDto.getUsername());
+            throw new CustomException(UserErrorCode.USERNAME_ALREADY_EXISTS);
         }
+        if (userRepository.existsByNickname(signUpDto.getNickname())) {
+            log.error("중복된 nickname: {}", signUpDto.getNickname());
+            throw new CustomException(UserErrorCode.NICKNAME_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByEmail(signUpDto.getEmail())) {
+            log.error("중복된 email: {}", signUpDto.getEmail());
+            throw new CustomException(UserErrorCode.EMAIL_ALREADY_EXISTS);
+        }
+        User savedUser = userRepository.save(user);
+        return UserResponseDto.from(savedUser);
     }
 
+    @Transactional(readOnly = true)
     public String getUserEmailByUsername(String username) {
         return userRepository.findEmailByUsername(username)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));

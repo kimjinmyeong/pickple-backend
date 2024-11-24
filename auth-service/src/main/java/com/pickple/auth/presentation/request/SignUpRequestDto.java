@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequestDto {
@@ -18,6 +17,7 @@ public class SignUpRequestDto {
     @Pattern(regexp = "^[a-z0-9]+$")  // 알파벳 소문자와 숫자로만 구성
     private String username;
 
+    @Setter
     private String password;
 
     @Size(min = 4, max = 10)

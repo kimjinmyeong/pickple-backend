@@ -102,8 +102,9 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    Boolean registerUser(@RequestBody SignUpRequestDto signUpDto) {
-        return userService.registerUser(signUpDto);
+    public ApiResponse<UserResponseDto> registerUser(@RequestBody SignUpRequestDto signUpDto) {
+        UserResponseDto registeredUser = userService.registerUser(signUpDto);
+        return ApiResponse.success(HttpStatus.OK, "회원가입 성공", registeredUser);
     }
 
     @GetMapping("/user/{username}")
