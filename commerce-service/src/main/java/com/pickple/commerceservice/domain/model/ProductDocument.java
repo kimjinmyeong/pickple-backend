@@ -1,7 +1,6 @@
 package com.pickple.commerceservice.domain.model;
 
 import com.pickple.commerceservice.infrastructure.messaging.events.ProductUpdatedEvent;
-import com.pickple.commerceservice.presentation.dto.request.ProductUpdateRequestDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
